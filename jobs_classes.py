@@ -8,9 +8,7 @@ class Vacancy:
         pass
 
 
-
 class CountMixin:
-
     @property
     def get_count_of_vacancy(self):
         """
@@ -20,13 +18,11 @@ class CountMixin:
         pass
 
 
-
 class HHVacancy(Vacancy):  # add counter mixin
     """ HeadHunter Vacancy """
 
     def __str__(self):
         return f'HH: {self.comany_name}, зарплата: {self.salary} руб/мес'
-
 
 
 class SJVacancy(Vacancy):  # add counter mixin
