@@ -60,3 +60,4 @@ if __name__ == '__main__':
     df.delete({'id':1})
     data_from_file = df.select(dict())
     assert data_from_file == []
+

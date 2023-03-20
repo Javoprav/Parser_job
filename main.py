@@ -11,7 +11,7 @@ if __name__ == '__main__':
     with open('hh.json', 'w', encoding='utf8') as f:
         json.dump(hh_json, f,  ensure_ascii=False)
         f.close()
-    # pprint(sj_json)
+
     with open('sj.json', 'w', encoding='utf8') as f:
         json.dump(sj_json, f, ensure_ascii=False)
         f.close()
