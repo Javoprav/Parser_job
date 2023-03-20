@@ -46,9 +46,23 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
 
 class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     """ SuperJob Vacancy """
+    def __init__(self, dict, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.name = dict['profession']
+        self.url = dict['link']
+        vacancyRichText = dict['vacancyRichText']
+        candidat = dict['candidat']
+        url_description = f'{candidat}\n{vacancyRichText}'
+        vacancies_txt = html2text(url_description)
+        self.description = vacancies_txt
+        self.salary = dict['payment_from']
+        self.company_name = dict['firm_name']
 
     def __str__(self):
-        return f'SJ: {self.company_name}, зарплата: {self.salary} руб/мес'
+        return f'HH.ru: Название вакансии: {self.name}, \n' \
+               f'url: {self.url}, Компания: \n{self.company_name}\n' \
+               f'Описание: {self.description},\n ' \
+               f'зарплата: {self.salary} руб/мес'
 
 
 def sorting(vacancies):

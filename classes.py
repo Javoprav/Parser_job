@@ -50,8 +50,18 @@ class Superjob(Engine):
         self.name = name
         self.api_key_sj: str = os.getenv('SUPER_JOB')
         url2 = 'https://api.superjob.ru/2.0/vacancies/'
-        params2 = {'town': '4', 'keyword': self.name, "count": 10000, 'geo[c][0]': '1', 'geo[c][1]': '4'}
+        params2 = {'town': '4', 'keyword': self.name, "count": 100, 'page': 0, 'geo[c][0]': '1', 'geo[c][1]': '4'}
         headers2 = {'X-Api-App-Id': self.api_key_sj}
         response2 = requests.get(url2, headers=headers2, params=params2)
         vacancies2 = response2.json()
-        return vacancies2
+        pprint(vacancies2)
+        list_sj = []
+        for x in range(10):
+            params2['page'] = x
+            response1 = requests.get(url2, headers=headers2, params=params2)
+            data1 = response1.content.decode()
+            response12 = json.loads(data1)
+            res1 = response12['objects']
+            for i in res1:
+                list_sj.append(i)
+        return list_sj
