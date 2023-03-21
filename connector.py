@@ -27,7 +27,13 @@ class Connector:
         Также проверить на деградацию и возбудить исключение
         если файл потерял актуальность в структуре данных
         """
-        pass
+        try:
+            with open(self.__data_file, encoding='utf-8') as f:
+                data = json.load(f)
+                if data:
+                    return 'Файл существует'
+        except AttributeError:
+            return 'Файла нет'
 
     def insert(self, data):
         """
