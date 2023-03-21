@@ -32,14 +32,24 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
         self.url = dict['alternate_url']
         url_description = dict['url']
         response = requests.get(url_description)
-        vacancies = response.json()
-        vacancies_html = vacancies['description']
+        response_decode = response.content.decode()
+        response_py = json.loads(response_decode)
+        vacancies_html = response_py['description']
         vacancies_txt = html2text(vacancies_html)
         self.description = vacancies_txt
-        self.salary = dict['salary']['from']
+        if dict['salary'] is None or dict['salary']['from'] is None:
+            self.salary = 'Не известно'
+        else:
+            self.salary = dict['salary']['from']
         self.company_name = dict['employer']['name']
 
     def __str__(self):
+        return f'HH.ru: Название вакансии: {self.name}, \n' \
+               f'url: {self.url}, Компания: \n{self.company_name}\n' \
+               f'Описание: {self.description},\n ' \
+               f'зарплата: {self.salary} руб/мес'
+
+    def __repr__(self):
         return f'HH.ru: Название вакансии: {self.name}, \n' \
                f'url: {self.url}, Компания: \n{self.company_name}\n' \
                f'Описание: {self.description},\n ' \
@@ -61,6 +71,12 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
         self.company_name = dict['firm_name']
 
     def __str__(self):
+        return f'superjob.ru: Название вакансии: {self.name}, \n' \
+               f'url: {self.url}, Компания: \n{self.company_name}\n' \
+               f'Описание: {self.description},\n ' \
+               f'зарплата: {self.salary} руб/мес'
+
+    def __repr__(self):
         return f'superjob.ru: Название вакансии: {self.name}, \n' \
                f'url: {self.url}, Компания: \n{self.company_name}\n' \
                f'Описание: {self.description},\n ' \

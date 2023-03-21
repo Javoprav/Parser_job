@@ -2,6 +2,7 @@ import requests, json, time, os
 from pprint import pprint
 from classes import *
 
+
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате
@@ -33,6 +34,7 @@ class Connector:
         Запись данных в файл с сохранением структуры и исходных данных
         """
         with open(self.__data_file, 'w', encoding='utf8') as f:
+            # f.write(str(data))
             json.dump(data, f, ensure_ascii=False)
             f.close()
 

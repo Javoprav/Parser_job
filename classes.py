@@ -26,16 +26,15 @@ class HH(Engine):
         response = requests.get(url, params=params)
         data = response.content.decode()
         response.close()
-        response = json.loads(data)
-        # pprint(response)
         list_hh = []
         # pages = response['pages']
         for page in range(10):
             params['page'] = page
             response1 = requests.get(url, params=params)
             data1 = response1.content.decode()
-            response12 = json.loads(data1)
-            res1 = response12['items']
+            response = json.loads(data1)
+            res1 = response['items']
+            # pprint(res1)
             for i in res1:
                 list_hh.append(i)
         return list_hh

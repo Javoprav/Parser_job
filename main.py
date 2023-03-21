@@ -14,10 +14,15 @@ if __name__ == '__main__':
     sj_connect = Connector('sj.json')
     hh_connect.insert(hh_json)
     sj_connect.insert(sj_json)
+    all_vac_hh = []
+    for i in range(len(hh_json)):
+        vacancy = HHVacancy(hh_json[i])
+        pprint(vacancy)
+        all_vac_hh.append(vacancy)
+    vac_test_hh = HHVacancy(hh_json[0])
+    len_vac_hh = vac_test_hh.get_count_of_vacancy('hh.json')
+    print(f'Собрано вакансий с сайта hh.ru - {len_vac_hh}')
 
-    # hh_vac = HHVacancy(hh_json)
-    # len_vac_hh = hh_vac.get_count_of_vacancy('hh.json')
-    # print(f'Собрано вакансий с сайта hh.ru - {len_vac_hh}')
     # with open('hh.json', 'w', encoding='utf8') as f:
     #     json.dump(hh_json, f,  ensure_ascii=False)
     #     f.close()
