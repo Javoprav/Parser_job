@@ -29,8 +29,8 @@ class HH(Engine):
         response = json.loads(data)
         # pprint(response)
         list_hh = []
-        pages = response['pages']
-        for page in range(pages):
+        # pages = response['pages']
+        for page in range(10):
             params['page'] = page
             response1 = requests.get(url, params=params)
             data1 = response1.content.decode()
@@ -50,13 +50,10 @@ class Superjob(Engine):
         self.name = name
         self.api_key_sj: str = os.getenv('SUPER_JOB')
         url2 = 'https://api.superjob.ru/2.0/vacancies/'
-        params2 = {'town': '4', 'keyword': self.name, "count": 100, 'page': 0, 'geo[c][0]': '1', 'geo[c][1]': '4'}
+        params2 = {'keyword': self.name, "count": 100, 'page': 0}
         headers2 = {'X-Api-App-Id': self.api_key_sj}
-        response2 = requests.get(url2, headers=headers2, params=params2)
-        vacancies2 = response2.json()
-        pprint(vacancies2)
         list_sj = []
-        for x in range(10):
+        for x in range(20):
             params2['page'] = x
             response1 = requests.get(url2, headers=headers2, params=params2)
             data1 = response1.content.decode()

@@ -1,18 +1,23 @@
+import requests, json, time, os
+from pprint import pprint
+from classes import *
+
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате
     не забывать проверять целостность данных, что файл с данными не подвергся
     внешней деградации
     """
-    __data_file = None
+    def __init__(self, file):
+        self.__data_file = file
+
     @property
     def data_file(self):
-        pass
+        return self.__data_file
 
     @data_file.setter
     def data_file(self, value):
-        # тут должен быть код для установки файла
-        self.__connect()
+        self.__data_file = value
 
     def __connect(self):
         """
@@ -27,7 +32,9 @@ class Connector:
         """
         Запись данных в файл с сохранением структуры и исходных данных
         """
-        pass
+        with open(self.__data_file, 'w', encoding='utf8') as f:
+            json.dump(data, f, ensure_ascii=False)
+            f.close()
 
     def select(self, query):
         """

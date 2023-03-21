@@ -13,13 +13,15 @@ class Vacancy:
 
 class CountMixin:
 
-    @property
-    def get_count_of_vacancy(self):
+    def get_count_of_vacancy(self, file):
         """
         Вернуть количество вакансий от текущего сервиса.
         Получать количество необходимо динамически из файла.
         """
-        pass
+        with open(file, encoding='utf-8') as f:
+            data = json.load(f)
+            f.close()
+            return len(data)
 
 
 class HHVacancy(Vacancy, CountMixin):  # add counter mixin
@@ -59,7 +61,7 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
         self.company_name = dict['firm_name']
 
     def __str__(self):
-        return f'HH.ru: Название вакансии: {self.name}, \n' \
+        return f'superjob.ru: Название вакансии: {self.name}, \n' \
                f'url: {self.url}, Компания: \n{self.company_name}\n' \
                f'Описание: {self.description},\n ' \
                f'зарплата: {self.salary} руб/мес'
