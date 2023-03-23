@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from pprint import pprint
-import requests, json, os
+import json
+import os
+import requests
 
 
 class Engine(ABC):
@@ -22,7 +23,7 @@ class HH(Engine):
         """Получает json с вакансиями по api"""
         self.name = name
         url = 'https://api.hh.ru/vacancies'
-        params = {'text': self.name, 'area': 113, 'page': 0, 'per_page': 100}
+        params = {'text': self.name, "experience": "noExperience", 'area': 113, 'page': 0, 'per_page': 100}
         response = requests.get(url, params=params)
         data = response.content.decode()
         response.close()

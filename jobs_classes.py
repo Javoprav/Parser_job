@@ -1,6 +1,7 @@
 import json, requests
 from html2text import html2text
 
+
 class Vacancy:
     __slots__ = ('name', 'url', 'description', 'salary', 'company_name', 'range_vac_hh')
 
@@ -27,6 +28,7 @@ class CountMixin:
 class HHVacancy(Vacancy, CountMixin):  # add counter mixin
     """ HeadHunter Vacancy """
     range_vac_hh = []
+
     def __init__(self, dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = dict['name']
@@ -48,8 +50,8 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
     def sorting(cls, vacancies):
         """ Должен сортировать любой список вакансий по ежемесячной оплате"""
         for i in range(len(vacancies)):
-          if vacancies[i]['salary'] != None and vacancies[i]['salary']['from'] != None:
-            cls.range_vac_hh.append(vacancies[i])
+            if vacancies[i]['salary'] is not None and vacancies[i]['salary']['from'] is not None:
+                cls.range_vac_hh.append(vacancies[i])
         cls.range_vac_hh.sort(key=lambda x: x['salary']['from'], reverse=True)
         return cls.range_vac_hh
 
@@ -78,6 +80,7 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
 class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     """ SuperJob Vacancy """
     range_vac_sj = []
+
     def __init__(self, dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = dict['profession']
@@ -94,8 +97,8 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     def sorting(cls, vacancies):
         """ Должен сортировать любой список вакансий по ежемесячной оплате (gt, lt magic methods) """
         for i in range(len(vacancies)):
-          if vacancies[i]['payment_from'] != None and vacancies[i]['payment_from'] != 0:
-            cls.range_vac_sj.append(vacancies[i])
+            if vacancies[i]['payment_from'] is not None and vacancies[i]['payment_from'] != 0:
+                cls.range_vac_sj.append(vacancies[i])
         cls.range_vac_sj.sort(key=lambda x: x['payment_from'], reverse=True)
         return cls.range_vac_sj
 
@@ -119,4 +122,3 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
                f'url: {self.url}, Компания: \n{self.company_name} \n' \
                f'Описание: {self.description}, \n' \
                f'зарплата: {self.salary} руб/мес'
-
