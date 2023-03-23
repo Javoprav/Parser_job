@@ -2,7 +2,7 @@ import json, requests
 from html2text import html2text
 
 class Vacancy:
-    __slots__ = ('name', 'url', 'description', 'salary', 'company_name')
+    __slots__ = ('name', 'url', 'description', 'salary', 'company_name', 'range_vac_hh')
 
     def __init__(self, *args, **kwargs):
         pass
@@ -26,6 +26,7 @@ class CountMixin:
 
 class HHVacancy(Vacancy, CountMixin):  # add counter mixin
     """ HeadHunter Vacancy """
+    range_vac_hh = []
     def __init__(self, dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = dict['name']
@@ -43,21 +44,40 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
             self.salary = dict['salary']['from']
         self.company_name = dict['employer']['name']
 
+    @classmethod
+    def sorting(cls, vacancies):
+        """ Должен сортировать любой список вакансий по ежемесячной оплате"""
+        for i in range(len(vacancies)):
+          if vacancies[i]['salary'] != None and vacancies[i]['salary']['from'] != None:
+            cls.range_vac_hh.append(vacancies[i])
+        cls.range_vac_hh.sort(key=lambda x: x['salary']['from'], reverse=True)
+        return cls.range_vac_hh
+
+    @classmethod
+    def get_top(cls):
+        """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
+        all_vac_sort_hh = []
+        for i in range(10):
+            vacancy = HHVacancy(cls.range_vac_hh[i])
+            all_vac_sort_hh.append(vacancy)
+        return all_vac_sort_hh
+
     def __str__(self):
         return f'HH.ru: Название вакансии: {self.name}, \n' \
-               f'url: {self.url}, Компания: \n{self.company_name}\n' \
-               f'Описание: {self.description},\n ' \
+               f'Ссылка: {self.url}, Компания: \n{self.company_name} \n' \
+               f'Описание: {self.description}, \n' \
                f'зарплата: {self.salary} руб/мес'
 
     def __repr__(self):
         return f'HH.ru: Название вакансии: {self.name}, \n' \
-               f'url: {self.url}, Компания: \n{self.company_name}\n' \
-               f'Описание: {self.description},\n ' \
+               f'url: {self.url}, Компания: \n{self.company_name} \n' \
+               f'Описание: {self.description}, \n' \
                f'зарплата: {self.salary} руб/мес'
 
 
 class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     """ SuperJob Vacancy """
+    range_vac_sj = []
     def __init__(self, dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = dict['profession']
@@ -70,24 +90,33 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
         self.salary = dict['payment_from']
         self.company_name = dict['firm_name']
 
+    @classmethod
+    def sorting(cls, vacancies):
+        """ Должен сортировать любой список вакансий по ежемесячной оплате (gt, lt magic methods) """
+        for i in range(len(vacancies)):
+          if vacancies[i]['payment_from'] != None and vacancies[i]['payment_from'] != 0:
+            cls.range_vac_sj.append(vacancies[i])
+        cls.range_vac_sj.sort(key=lambda x: x['payment_from'], reverse=True)
+        return cls.range_vac_sj
+
+    @classmethod
+    def get_top(cls):
+        """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
+        all_vac_sort_sj = []
+        for i in range(10):
+            vacancy = SJVacancy(cls.range_vac_sj[i])
+            all_vac_sort_sj.append(vacancy)
+        return all_vac_sort_sj
+
     def __str__(self):
         return f'superjob.ru: Название вакансии: {self.name}, \n' \
-               f'url: {self.url}, Компания: \n{self.company_name}\n' \
-               f'Описание: {self.description},\n ' \
+               f'url: {self.url}, Компания: \n{self.company_name} \n' \
+               f'Описание: {self.description}, \n' \
                f'зарплата: {self.salary} руб/мес'
 
     def __repr__(self):
         return f'superjob.ru: Название вакансии: {self.name}, \n' \
-               f'url: {self.url}, Компания: \n{self.company_name}\n' \
-               f'Описание: {self.description},\n ' \
+               f'url: {self.url}, Компания: \n{self.company_name} \n' \
+               f'Описание: {self.description}, \n' \
                f'зарплата: {self.salary} руб/мес'
 
-
-def sorting(vacancies):
-    """ Должен сортировать любой список вакансий по ежемесячной оплате (gt, lt magic methods) """
-    pass
-
-
-def get_top(vacancies, top_count):
-    """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
-    pass

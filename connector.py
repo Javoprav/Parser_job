@@ -29,7 +29,7 @@ class Connector:
         """
         try:
             with open(self.__data_file, encoding='utf-8') as f:
-                data = json.load(f)
+                data = json.loads(f)
                 if data:
                     return 'Файл существует'
         except AttributeError:
@@ -75,4 +75,3 @@ if __name__ == '__main__':
     df.delete({'id':1})
     data_from_file = df.select(dict())
     assert data_from_file == []
-

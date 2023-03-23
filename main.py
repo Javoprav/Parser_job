@@ -4,6 +4,7 @@ from classes import *
 from connector import *
 from jobs_classes import *
 
+
 hh = HH()
 sj = Superjob()
 if __name__ == '__main__':
@@ -16,11 +17,13 @@ if __name__ == '__main__':
     sj_connect.insert(sj_json)
     vac_test_hh = HHVacancy(hh_json[0])
     vac_test_sj = SJVacancy(sj_json[0])
+    # pprint(sj_json[0])
+    # pprint(vac_test_sj)
     len_vac_hh = vac_test_hh.get_count_of_vacancy('hh.json')
     len_vac_sj = vac_test_sj.get_count_of_vacancy('sj.json')
     print(f'Собрано вакансий с сайта hh.ru - {len_vac_hh} и записаны в файл "hh.json"')
     print(f'Собрано вакансий с сайта superjob.ru - {len_vac_sj} и записаны в файл "sj.json"')
-    user_input2 = input(f'Если хотите увидеть все \nвакансии с сайта hh.ru введите "hh", \nс сайта superjob.ru введите "sj", \nесли хотите выйти напишите "stop" или любую букву: ')
+    user_input2 = input(f'-- Если хотите увидеть все вакансии с сайта hh.ru введите "hh", \n-- Если хотите увидеть все вакансии с сайта superjob.ru введите "sj", \n-- Если хотите отсортировать по зарплате вакансии с сайта hh.ru введите "sort-hh" или "sort-sj", \n-- Если хотите увидеть Top-10 вакансии с сайта hh.ru введите "Top-hh" или "Top-sj", \n-- если хотите выйти напишите "stop" или любую букву: ')
     if user_input2.lower() == 'hh':
         all_vac_hh = []
         for i in range(len(hh_json)):
@@ -33,17 +36,31 @@ if __name__ == '__main__':
             vacancy = SJVacancy(sj_json[i])
             all_vac_sj.append(vacancy)
         print(all_vac_sj)
+    elif user_input2.lower() == "sort-hh":
+        sort_vac_hh = vac_test_hh.sorting(hh_json)
+        all_vac_sort_hh = []
+        for i in range(len(sort_vac_hh)):
+            vacancy = HHVacancy(sort_vac_hh[i])
+            all_vac_sort_hh.append(vacancy)
+        print(all_vac_sort_hh)
+    elif user_input2.lower() == "sort-sj":
+        sort_vac_sj = vac_test_sj.sorting(sj_json)
+        all_vac_sort_sj = []
+        for i in range(len(sort_vac_sj)):
+            vacancy = SJVacancy(sort_vac_sj[i])
+            all_vac_sort_sj.append(vacancy)
+        print(all_vac_sort_sj)
+    elif user_input2.lower() == "top-hh":
+        sort_vac_hh = vac_test_hh.sorting(hh_json)
+        sort_vac_top = vac_test_hh.get_top()
+        print(sort_vac_top)
+    elif user_input2.lower() == "top-sj":
+        sort_vac_sj = vac_test_sj.sorting(sj_json)
+        sort_vac_top = vac_test_sj.get_top()
+        print(sort_vac_top)
     elif user_input2.lower() == 'stop':
         print("Выход!")
         exit()
     else:
         print("Не верный ввод! Выход!")
         exit()
-
-    # with open('hh.json', 'w', encoding='utf8') as f:
-    #     json.dump(hh_json, f,  ensure_ascii=False)
-    #     f.close()
-    #
-    # with open('sj.json', 'w', encoding='utf8') as f:
-    #     json.dump(sj_json, f, ensure_ascii=False)
-    #     f.close()
