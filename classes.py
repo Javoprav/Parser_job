@@ -52,7 +52,7 @@ class Superjob(Engine):
         self.name = name
         self.api_key_sj: str = os.getenv('SUPER_JOB')
         url2 = 'https://api.superjob.ru/2.0/vacancies/'
-        params2 = {'keyword': self.name, "count": 100, 'page': 0}
+        params2 = {'keyword': self.name, "experience": 1, "count": 100, 'page': 0}
         headers2 = {'X-Api-App-Id': self.api_key_sj}
         list_sj = []
         for x in range(1):
