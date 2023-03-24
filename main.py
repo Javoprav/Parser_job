@@ -1,4 +1,3 @@
-import requests, json, time, os
 from pprint import pprint
 from classes import *
 from connector import *
