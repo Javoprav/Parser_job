@@ -1,6 +1,4 @@
-import requests, json, time, os
-from pprint import pprint
-from classes import *
+import json
 
 
 class Connector:
