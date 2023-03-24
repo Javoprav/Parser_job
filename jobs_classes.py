@@ -3,6 +3,7 @@ from html2text import html2text
 
 
 class Vacancy:
+    """Ограничение по атрибутам в пользу скорости"""
     __slots__ = ('name', 'url', 'description', 'salary', 'company_name', 'range_vac_hh')
 
     def __init__(self, *args, **kwargs):
@@ -15,10 +16,7 @@ class Vacancy:
 class CountMixin:
 
     def get_count_of_vacancy(self, file):
-        """
-        Вернуть количество вакансий от текущего сервиса.
-        Получать количество необходимо динамически из файла.
-        """
+        """Вернуть количество вакансий от текущего сервиса."""
         with open(file, encoding='utf-8') as f:
             data = json.load(f)
             f.close()
@@ -48,7 +46,7 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
 
     @classmethod
     def sorting(cls, vacancies):
-        """ Должен сортировать любой список вакансий по ежемесячной оплате"""
+        """Сортирует любой список вакансий по ежемесячной оплате"""
         for i in range(len(vacancies)):
             if vacancies[i]['salary'] is not None and vacancies[i]['salary']['from'] is not None:
                 cls.range_vac_hh.append(vacancies[i])
@@ -57,7 +55,7 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
 
     @classmethod
     def get_top(cls):
-        """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
+        """Возвращает {top_count} записей из вакансий по зарплате"""
         all_vac_sort_hh = []
         for i in range(10):
             vacancy = HHVacancy(cls.range_vac_hh[i])
@@ -95,7 +93,7 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
 
     @classmethod
     def sorting(cls, vacancies):
-        """ Должен сортировать любой список вакансий по ежемесячной оплате (gt, lt magic methods) """
+        """Сортирует любой список вакансий по ежемесячной оплате"""
         for i in range(len(vacancies)):
             if vacancies[i]['payment_from'] is not None and vacancies[i]['payment_from'] != 0:
                 cls.range_vac_sj.append(vacancies[i])
@@ -104,8 +102,7 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
 
     @classmethod
     def get_top(cls):
-        """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
-        all_vac_sort_sj = []
+        """Возвращает {top_count} записей из вакансий по зарплате"""
         for i in range(10):
             vacancy = SJVacancy(cls.range_vac_sj[i])
             all_vac_sort_sj.append(vacancy)
