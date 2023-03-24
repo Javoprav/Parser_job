@@ -18,3 +18,5 @@ __pycache__/
 .git
 /venv/
 /.coverage
+/test.py
+/test_sj.json

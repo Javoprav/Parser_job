@@ -1,33 +1,47 @@
+import requests, json, time, os
+from pprint import pprint
+from classes import *
+
+
 class Connector:
     """
-    Класс коннектор к файлу, обязательно файл должен быть в json формате
-    не забывать проверять целостность данных, что файл с данными не подвергся
-    внешнего деградации
+    Класс коннектор к файлу, в json формате
+    проверка файла с данными на деградацию
     """
-    __data_file = None
+    def __init__(self, file):
+        self.__data_file = file
+
     @property
     def data_file(self):
-        pass
+        """Возврат файла"""
+        return self.__data_file
 
     @data_file.setter
     def data_file(self, value):
-        # тут должен быть код для установки файла
-        self.__connect()
+        """Установка файла"
+        self.__data_file = value
 
     def __connect(self):
         """
-        Проверка на существование файла с данными и
-        создание его при необходимости
-        Также проверить на деградацию и возбудить исключение
-        если файл потерял актуальность в структуре данных
+        Проверка на существование файла
+        Также проверить на деградацию
         """
-        pass
+        try:
+            with open(self.__data_file, encoding='utf-8') as f:
+                data = json.loads(f)
+                if data:
+                    return 'Файл существует'
+        except AttributeError:
+            return 'Файла нет'
 
     def insert(self, data):
         """
         Запись данных в файл с сохранением структуры и исходных данных
         """
-        pass
+        with open(self.__data_file, 'w', encoding='utf8') as f:
+            # f.write(str(data))
+            json.dump(data, f, ensure_ascii=False)
+            f.close()
 
     def select(self, query):
         """

@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+import json
+import os
 import requests
 
 
@@ -18,12 +20,27 @@ class HH(Engine):
         self.name = None
 
     def get_request(self, name):
+        """Получает json с вакансиями по api"""
         self.name = name
         url = 'https://api.hh.ru/vacancies'
-        params = {'text': self.name, 'area': '1'}
+        params = {'text': self.name, "experience": "noExperience", 'area': 113, 'page': 0, 'per_page': 100}
         response = requests.get(url, params=params)
-        vacancies = response.json()
-        return vacancies
+        data = response.content.decode()
+        response.close()
+        list_hh = []
+        dict_hh = {}
+        # pages = response['pages']
+        for page in range(1):
+            params['page'] = page
+            response1 = requests.get(url, params=params)
+            data1 = response1.content.decode()
+            response = json.loads(data1)
+            res1 = response['items']
+            # pprint(res1)
+            for i in res1:
+                list_hh.append(i)
+
+        return list_hh
 
 
 class Superjob(Engine):
@@ -31,10 +48,19 @@ class Superjob(Engine):
         self.name = None
 
     def get_request(self, name):
+        """Получает json с вакансиями по api"""
         self.name = name
+        self.api_key_sj: str = os.getenv('SUPER_JOB')
         url2 = 'https://api.superjob.ru/2.0/vacancies/'
-        params2 = {'keyword': self.name, 'geo[c][0]': '1', 'geo[c][1]': '4'}
-        headers2 = {'X-Api-App-Id': 'v3.r.137434972.ee8a700b3805844e09b585e96390378700ad3dd3.996bd4d06d883979e271162feb034b2ed0b00da2'}
-        response2 = requests.get(url2, headers=headers2, params=params2)
-        vacancies2 = response2.json()
-        return vacancies2
+        params2 = {'keyword': self.name, "experience": 1, "count": 100, 'page': 0}
+        headers2 = {'X-Api-App-Id': self.api_key_sj}
+        list_sj = []
+        for x in range(1):
+            params2['page'] = x
+            response1 = requests.get(url2, headers=headers2, params=params2)
+            data1 = response1.content.decode()
+            response12 = json.loads(data1)
+            res1 = response12['objects']
+            for i in res1:
+                list_sj.append(i)
+        return list_sj
