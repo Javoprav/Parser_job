@@ -16,7 +16,7 @@ class Connector:
 
     @data_file.setter
     def data_file(self, value):
-        """Установка файла"
+        """Установка файла"""
         self.__data_file = value
 
     def __connect(self):
