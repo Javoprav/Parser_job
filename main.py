@@ -1,6 +1,6 @@
 from pprint import pprint
 from classes import *
-from connector import *
+from connector import Connector
 from jobs_classes import *
 
 
