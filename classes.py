@@ -29,7 +29,7 @@ class HH(Engine):
         list_hh = []
         dict_hh = {}
         # pages = response['pages']
-        for page in range(1):
+        for page in range(20):
             params['page'] = page
             response1 = requests.get(url, params=params)
             data1 = response1.content.decode()
@@ -54,7 +54,7 @@ class Superjob(Engine):
         params2 = {'keyword': self.name, "experience": 1, "count": 100, 'page': 0}
         headers2 = {'X-Api-App-Id': self.api_key_sj}
         list_sj = []
-        for x in range(1):
+        for x in range(20):
             params2['page'] = x
             response1 = requests.get(url2, headers=headers2, params=params2)
             data1 = response1.content.decode()
