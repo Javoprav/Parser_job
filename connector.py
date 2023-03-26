@@ -1,4 +1,5 @@
 import json
+from jobs_classes import *
 
 
 class Connector:
@@ -49,7 +50,11 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        pass
+        all_vac_hh = []
+        for i in range(len(query)):
+            vacancy = HHVacancy(query[i])
+            all_vac_hh.append(vacancy)
+        return all_vac_hh
 
     def delete(self, query):
         pass

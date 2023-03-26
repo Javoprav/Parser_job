@@ -10,8 +10,8 @@ if __name__ == '__main__':
     user_input = input('Введите название вакансии: ')
     hh_json = hh.get_request(user_input)
     sj_json = sj.get_request(user_input)
-    hh_connect = Connector('hh.json')
-    sj_connect = Connector('sj.json')
+    hh_connect = hh.get_connector('hh.json')
+    sj_connect = sj.get_connector('sj.json')
     hh_connect.insert(hh_json)
     sj_connect.insert(sj_json)
     vac_test_hh = HHVacancy(hh_json[0])
@@ -29,6 +29,7 @@ if __name__ == '__main__':
                         f'\n-- Если хотите увидеть Top-10 вакансии с сайта hh.ru введите "Top-hh" или "Top-sj", '
                         f'\n-- если хотите выйти напишите "stop" или любую букву: ')
     if user_input2.lower() == 'hh':
+        # hh_connect.select(hh_json)
         all_vac_hh = []
         for i in range(len(hh_json)):
             vacancy = HHVacancy(hh_json[i])

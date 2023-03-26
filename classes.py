@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 import json
 import requests
+import os
+from connector import Connector
 
 
 class Engine(ABC):
@@ -11,7 +13,10 @@ class Engine(ABC):
     @staticmethod
     def get_connector(file_name):
         """ Возвращает экземпляр класса Connector """
-        pass
+        connect = Connector(file_name)
+        return connect
+        # hh_connect = Connector('hh.json')
+        # sj_connect = Connector('sj.json')
 
 
 class HH(Engine):
@@ -24,18 +29,14 @@ class HH(Engine):
         url = 'https://api.hh.ru/vacancies'
         params = {'text': self.name, "experience": "noExperience", 'area': 113, 'page': 0, 'per_page': 100}
         response = requests.get(url, params=params)
-        data = response.content.decode()
         response.close()
         list_hh = []
-        dict_hh = {}
-        # pages = response['pages']
-        for page in range(20):
+        for page in range(1):
             params['page'] = page
             response1 = requests.get(url, params=params)
             data1 = response1.content.decode()
             response = json.loads(data1)
             res1 = response['items']
-            # pprint(res1)
             for i in res1:
                 list_hh.append(i)
 
@@ -54,7 +55,7 @@ class Superjob(Engine):
         params2 = {'keyword': self.name, "experience": 1, "count": 100, 'page': 0}
         headers2 = {'X-Api-App-Id': self.api_key_sj}
         list_sj = []
-        for x in range(20):
+        for x in range(1):
             params2['page'] = x
             response1 = requests.get(url2, headers=headers2, params=params2)
             data1 = response1.content.decode()
