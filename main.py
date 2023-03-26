@@ -1,6 +1,4 @@
-from pprint import pprint
 from classes import *
-from connector import Connector
 from jobs_classes import *
 
 
@@ -28,41 +26,48 @@ if __name__ == '__main__':
                         f'"sort-sj",'
                         f'\n-- Если хотите увидеть Top-10 вакансии с сайта hh.ru введите "Top-hh" или "Top-sj", '
                         f'\n-- если хотите выйти напишите "stop" или любую букву: ')
+    dict_hh = hh_connect.select()
+    dict_sj = sj_connect.select()
     if user_input2.lower() == 'hh':
-        # hh_connect.select(hh_json)
         all_vac_hh = []
-        for i in range(len(hh_json)):
-            vacancy = HHVacancy(hh_json[i])
+        for i in range(len(dict_hh)):
+            vacancy = HHVacancy(dict_hh[i])
             all_vac_hh.append(vacancy)
-        print(all_vac_hh)
+        for x in all_vac_hh:
+            print(x)
     elif user_input2.lower() == 'sj':
         all_vac_sj = []
-        for i in range(len(sj_json)):
-            vacancy = SJVacancy(sj_json[i])
+        for i in range(len(dict_sj)):
+            vacancy = SJVacancy(dict_sj[i])
             all_vac_sj.append(vacancy)
-        print(all_vac_sj)
+        for x in all_vac_sj:
+            print(x)
     elif user_input2.lower() == "sort-hh":
-        sort_vac_hh = vac_test_hh.sorting(hh_json)
+        sort_vac_hh = vac_test_hh.sorting(dict_hh)
         all_vac_sort_hh = []
         for i in range(len(sort_vac_hh)):
             vacancy = HHVacancy(sort_vac_hh[i])
             all_vac_sort_hh.append(vacancy)
-        print(all_vac_sort_hh)
+        for x in all_vac_sort_hh:
+            print(x)
     elif user_input2.lower() == "sort-sj":
-        sort_vac_sj = vac_test_sj.sorting(sj_json)
+        sort_vac_sj = vac_test_sj.sorting(dict_sj)
         all_vac_sort_sj = []
         for i in range(len(sort_vac_sj)):
             vacancy = SJVacancy(sort_vac_sj[i])
             all_vac_sort_sj.append(vacancy)
-        print(all_vac_sort_sj)
+        for x in all_vac_sort_sj:
+            print(x)
     elif user_input2.lower() == "top-hh":
-        sort_vac_hh = vac_test_hh.sorting(hh_json)
+        sort_vac_hh = vac_test_hh.sorting(dict_hh)
         sort_vac_top = vac_test_hh.get_top()
-        print(sort_vac_top)
+        for x in sort_vac_top:
+            print(x)
     elif user_input2.lower() == "top-sj":
-        sort_vac_sj = vac_test_sj.sorting(sj_json)
+        sort_vac_sj = vac_test_sj.sorting(dict_sj)
         sort_vac_top = vac_test_sj.get_top()
-        print(sort_vac_top)
+        for x in sort_vac_top:
+            print(x)
     elif user_input2.lower() == 'stop':
         print("Выход!")
         exit()

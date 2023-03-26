@@ -23,13 +23,13 @@ class HH(Engine):
     def __init__(self):
         self.name = None
 
-    def get_request(self, name):
+    def get_request(self, name=''):
         """Получает json с вакансиями по api"""
         self.name = name
         url = 'https://api.hh.ru/vacancies'
         params = {'text': self.name, "experience": "noExperience", 'area': 113, 'page': 0, 'per_page': 100}
-        response = requests.get(url, params=params)
-        response.close()
+        # response = requests.get(url, params=params)
+        # response.close()
         list_hh = []
         for page in range(1):
             params['page'] = page
@@ -45,9 +45,10 @@ class HH(Engine):
 
 class Superjob(Engine):
     def __init__(self):
+        self.api_key_sj = None
         self.name = None
 
-    def get_request(self, name):
+    def get_request(self, name=''): 
         """Получает json с вакансиями по api"""
         self.name = name
         self.api_key_sj: str = os.getenv('SUPER_JOB')

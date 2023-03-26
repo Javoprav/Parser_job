@@ -23,3 +23,12 @@ from connector import *
 
 #     # pprint(data)
 #     myDict = {i: data[i] for i in range(0, len(data), 1)} # чудный словарик получился
+
+
+url = 'https://api.hh.ru/vacancies'
+params = {'text': "Python разработчик", "description": 'required', "experience": "noExperience", 'area': 113, 'page': 0, 'per_page': 100}
+response = requests.get(url, params=params)
+data1 = response.content.decode()
+response1 = json.loads(data1)
+pprint(response1)
+

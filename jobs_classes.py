@@ -1,4 +1,4 @@
-import json, requests
+import json
 from html2text import html2text
 
 
@@ -15,7 +15,8 @@ class Vacancy:
 
 class CountMixin:
 
-    def get_count_of_vacancy(self, file):
+    @staticmethod
+    def get_count_of_vacancy(file):
         """Вернуть количество вакансий от текущего сервиса."""
         with open(file, encoding='utf-8') as f:
             data = json.load(f)
@@ -27,22 +28,28 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
     """ HeadHunter Vacancy """
     range_vac_hh = []
 
-    def __init__(self, dict, *args, **kwargs):
+    def __init__(self, dict_vac, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = dict['name']
-        self.url = dict['alternate_url']
-        url_description = dict['url']
-        response = requests.get(url_description)
-        response_decode = response.content.decode()
-        response_py = json.loads(response_decode)
-        vacancies_html = response_py['description']
-        vacancies_txt = html2text(vacancies_html)
-        self.description = vacancies_txt
-        if dict['salary'] is None or dict['salary']['from'] is None:
+        self.name = dict_vac['name']
+        self.url = dict_vac['alternate_url']
+        # url_description = dict['url']
+        # response = requests.get(url_description)
+        # response_decode = response.content.decode()
+        # response_py = json.loads(response_decode)
+        # vacancies_html = response_py['description']
+        # vacancies_txt = html2text(vacancies_html)
+        snippet_html = dict_vac['snippet']['requirement']
+        responsibility_html = dict_vac['snippet']['responsibility']
+        snippet = f'{snippet_html}\n{responsibility_html}'
+        description = html2text(snippet).rstrip()
+        # responsibility = html2text(responsibility_html)
+        # self.description = vacancies_txt
+        self.description = description
+        if dict_vac['salary'] is None or dict_vac['salary']['from'] is None:
             self.salary = 'Не известно'
         else:
-            self.salary = dict['salary']['from']
-        self.company_name = dict['employer']['name']
+            self.salary = dict_vac['salary']['from']
+        self.company_name = dict_vac['employer']['name']
 
     @classmethod
     def sorting(cls, vacancies):
@@ -65,31 +72,31 @@ class HHVacancy(Vacancy, CountMixin):  # add counter mixin
     def __str__(self):
         return f'HH.ru: Название вакансии: {self.name}, \n' \
                f'Ссылка: {self.url}, Компания: \n{self.company_name} \n' \
-               f'Описание: {self.description}, \n' \
-               f'зарплата: {self.salary} руб/мес'
+               f'Описание: {self.description}\n' \
+               f'зарплата: {self.salary} руб/мес\n'
 
     def __repr__(self):
         return f'HH.ru: Название вакансии: {self.name}, \n' \
-               f'url: {self.url}, Компания: \n{self.company_name} \n' \
-               f'Описание: {self.description}, \n' \
-               f'зарплата: {self.salary} руб/мес'
+               f'Ссылка: {self.url}, Компания: \n{self.company_name} \n' \
+               f'Описание: {self.description}\n' \
+               f'зарплата: {self.salary} руб/мес\n'
 
 
 class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     """ SuperJob Vacancy """
     range_vac_sj = []
 
-    def __init__(self, dict, *args, **kwargs):
+    def __init__(self, dict_vac, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = dict['profession']
-        self.url = dict['link']
-        vacancyRichText = dict['vacancyRichText']
-        candidat = dict['candidat']
-        url_description = f'{candidat}\n{vacancyRichText}'
+        self.name = dict_vac['profession']
+        self.url = dict_vac['link']
+        vacancyRichText = dict_vac['vacancyRichText']
+        candidate = dict_vac['candidat']
+        url_description = f'{candidate}\n{vacancyRichText}'
         vacancies_txt = html2text(url_description)
         self.description = vacancies_txt
-        self.salary = dict['payment_from']
-        self.company_name = dict['firm_name']
+        self.salary = dict_vac['payment_from']
+        self.company_name = dict_vac['firm_name']
 
     @classmethod
     def sorting(cls, vacancies):
@@ -103,6 +110,7 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     @classmethod
     def get_top(cls):
         """Возвращает {top_count} записей из вакансий по зарплате"""
+        all_vac_sort_sj = []
         for i in range(10):
             vacancy = SJVacancy(cls.range_vac_sj[i])
             all_vac_sort_sj.append(vacancy)
@@ -111,11 +119,11 @@ class SJVacancy(Vacancy, CountMixin):  # add counter mixin
     def __str__(self):
         return f'superjob.ru: Название вакансии: {self.name}, \n' \
                f'url: {self.url}, Компания: \n{self.company_name} \n' \
-               f'Описание: {self.description}, \n' \
-               f'зарплата: {self.salary} руб/мес'
+               f'Описание: {self.description}'\
+               f'зарплата: {self.salary} руб/мес\n'
 
     def __repr__(self):
         return f'superjob.ru: Название вакансии: {self.name}, \n' \
                f'url: {self.url}, Компания: \n{self.company_name} \n' \
-               f'Описание: {self.description}, \n' \
-               f'зарплата: {self.salary} руб/мес'
+               f'Описание: {self.description}'\
+               f'зарплата: {self.salary} руб/мес\n'
